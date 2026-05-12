@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.python-version
+
+# Node.js
+node_modules/
+
+# WorkBuddy
+.workbuddy/
+
+# Generated experiment outputs
+results/*.png
+results/*.log
+
+# Personal / generated documents
+*.docx
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db
