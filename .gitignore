@@ -4,15 +4,17 @@ __pycache__/
 .venv/
 .python-version
 
-# Node.js
+# Node.js（纯 Python 项目，不需要）
 node_modules/
+package.json
+package-lock.json
 
 # WorkBuddy
 .workbuddy/
 
 # Generated experiment outputs
-results/*.png
-results/*.log
+results/
+*.png
 
 # Personal / generated documents
 *.docx
