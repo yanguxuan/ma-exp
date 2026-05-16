@@ -81,33 +81,11 @@ for name, m in all_metrics.items():
     print(f"{name:<20} {m['served']:>8.1f} {m['abandoned']:>8.1f} {m['avg_wait']:>10.1f} {m['avg_ride']:>10.1f} {m['abandon_rate']:>9.1%}")
 print("="*70)
 
-# ========== 可视化 ==========
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+# ========== 可视化（使用统一美观模块）==========
+from src.visualization import plot_algorithm_comparison
 
-names = list(all_metrics.keys())
-fig, axes = plt.subplots(2, 2, figsize=(10, 8))
-fig.suptitle("ETA-based vs IL+RL 算法对比（3台电梯）", fontsize=14, fontweight="bold")
-
-colors = ["#3498db", "#e74c3c"]
-
-metrics_plot = [
-    ("平均送达人数", [all_metrics[n]["served"] for n in names], "#2ecc71"),
-    ("平均放弃人数", [all_metrics[n]["abandoned"] for n in names], "#e74c3c"),
-    ("平均等待时间(AWT秒)", [all_metrics[n]["avg_wait"] for n in names], "#3498db"),
-    ("平均行程时间(ART秒)", [all_metrics[n]["avg_ride"] for n in names], "#f39c12"),
-]
-
-for ax, (title, vals, color) in zip(axes.flat, metrics_plot):
-    bars = ax.bar(names, vals, color=color, width=0.4)
-    ax.set_title(title, fontsize=11)
-    for bar, v in zip(bars, vals):
-        ax.annotate(f"{v:.1f}", xy=(bar.get_x()+bar.get_width()/2, bar.get_height()),
-                    xytext=(0, 3), textcoords="offset points", ha="center", fontsize=10)
-
-plt.tight_layout()
-path = "results/eta_vs_ilrl_comparison.png"
-plt.savefig(path, dpi=150, bbox_inches="tight")
-print(f"\n📊 对比图已保存：{path}")
-plt.close()
+fig = plot_algorithm_comparison(
+    results_dict=all_metrics,
+    save_path="results/eta_vs_ilrl_comparison.png"
+)
+print(f"\n📊 对比图已保存：results/eta_vs_ilrl_comparison.png")

@@ -208,6 +208,7 @@ class ExperimentRunner:
     # --------------------------
 
     def visualize(self, save: bool = True):
+        """生成对比图表"""
         """生成对比图表（美观版，支持中文字体）"""
         if not self.results:
             print("⚠️ 没有可可视化的结果，请先运行实验。")
@@ -221,7 +222,8 @@ class ExperimentRunner:
         fig = plot_metrics_comparison(self.results, save_path=save_path)
         
         if save and save_path:
-            print("图表已保存:", save_path)
+            print(f"
+📊 图表已保存：{save_path}")
         plt.close(fig)
 
     def print_summary(self):
@@ -262,7 +264,7 @@ def main():
         runner.add_algorithm(ILRLBasedAlgorithm(
             num_elevators=config.num_elevators,
             num_floors=config.num_floors,
-            model_path="ilrl_model.pth"
+            model_path="F:/aimathlab/project/ma-exp-main/ilrl_model.pth"
         ))
     except FileNotFoundError:
         print("⚠️ 未找到 ilrl_model.pth，跳过 IL+RL 算法。请先运行 train_ilrl.py 训练模型。")
