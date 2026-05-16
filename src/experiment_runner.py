@@ -21,7 +21,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from src.simulator import ElevatorSimulator
 from src.algorithms import BaseAlgorithm, ETABasedAlgorithm
+# 导入 IL+RL 算法
+from src.algorithms.ilrl_based import ILRLBasedAlgorithm
 
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 # =========================
 # 实验配置
@@ -307,10 +310,18 @@ def main():
     # 注册算法（统一接口）
     runner.add_eta_based()   # ETA-based 工业基线
 
-    # ---- 后续添加 RL 算法示例 ----
-    # runner.add_rl_algorithm(my_rl_algo)
-    # ---- 后续添加模仿学习算法示例 ----
-    # runner.add_imitation_algorithm(my_il_algo)
+    # 添加 IL+RL 算法（加载预训练模型）
+    # 请确保 ilrl_model.pth 文件存在于当前工作目录
+    try:
+        runner.add_algorithm(ILRLBasedAlgorithm(
+            num_elevators=config.num_elevators,
+            num_floors=config.num_floors,
+            model_path="F:/aimathlab/project/ma-exp-main/ilrl_model.pth"
+        ))
+    except FileNotFoundError:
+        print("⚠️ 未找到 ilrl_model.pth，跳过 IL+RL 算法。请先运行 train_ilrl.py 训练模型。")
+    except Exception as e:
+        print(f"⚠️ 加载 IL+RL 算法失败：{e}")
 
     # 运行实验
     runner.run_all()
@@ -326,3 +337,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
