@@ -20,7 +20,7 @@ from datetime import datetime
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from src.simulator import ElevatorSimulator
-from src.algorithms import BaseAlgorithm, ETABasedAlgorithm
+from src.algorithms import BaseAlgorithm, ETABasedAlgorithm, MultiAgentRLAlgorithm
 # 导入 IL+RL 算法
 from src.algorithms.ilrl_based import ILRLBasedAlgorithm
 
@@ -89,6 +89,16 @@ class ExperimentRunner:
         algo = ETABasedAlgorithm(
             num_elevators=self.config.num_elevators,
             num_floors=self.config.num_floors,
+        )
+        self.add_algorithm(algo)
+
+    def add_multi_agent_rl(self, model_path: str = "marl_model.pth"):
+        """添加 Multi-Agent RL 多智能体强化学习算法。"""
+        algo = MultiAgentRLAlgorithm(
+            num_elevators=self.config.num_elevators,
+            num_floors=self.config.num_floors,
+            model_path=model_path,
+            heuristic_fallback=True,
         )
         self.add_algorithm(algo)
 
@@ -269,6 +279,9 @@ def main():
     except Exception as e:
         print(f"⚠️ 加载 IL+RL 算法失败：{e}")
 
+    # 添加 Multi-Agent RL。若 marl_model.pth 尚未训练生成，会使用确定性启发式兜底策略。
+    runner.add_multi_agent_rl(model_path="marl_model.pth")
+
     # 运行实验
     runner.run_all()
 
@@ -283,7 +296,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 
